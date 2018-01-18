@@ -4,7 +4,17 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 class LinkList extends Component {
-
+  _updateCacheAfterVote = (store, createVote, linkId) => {
+    // 1
+    const data = store.readQuery({ query: FEED_QUERY })
+  
+    // 2
+    const votedLink = data.feed.links.find(link => link.id === linkId)
+    votedLink.votes = createVote.link.votes
+  
+    // 3
+    store.writeQuery({ query: FEED_QUERY, data })
+  }
   render() {
 
     // 1
@@ -24,25 +34,35 @@ class LinkList extends Component {
 
     return (
       <div>
-        {linksToRender.map(link => (
-          <Link key={link.id} link={link}/>
-        ))}
+      {linksToRender.map((link, index) => (
+        <Link key={link.id} updateStoreAfterVote={this._updateCacheAfterVote} index={index} link={link}/>
+      ))}
       </div>
     )
   }
 
 }
 
+
+
 // 1
-const FEED_QUERY = gql`
-  # 2
-  query FeedQuery {
-    feed {
+export const FEED_QUERY = gql`
+  query FeedQuery($first: Int, $skip: Int) {
+    feed(first: $first, skip: $skip) {
         id
         url
         description
+        postedBy {
+          id
+          name
+        }
+        votes {
+          user {
+            id
+          }
+        }
     }
-  } 
+  }
 `
 
 // 3
