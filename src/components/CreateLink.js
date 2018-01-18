@@ -47,7 +47,7 @@ class CreateLink extends Component {
       },
       update: (store, { data: { post } }) => {
         const data = store.readQuery({ query: FEED_QUERY })
-        data.feed.links.splice(0,0,post)
+        data.feed.splice(0,0,post)
         store.writeQuery({
           query: FEED_QUERY,
           data

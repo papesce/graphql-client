@@ -12,8 +12,9 @@ class Link extends Component {
       <div>
         {this.props.index + 1}.
         {authToken &&  <button onClick={this._voteForLink}>▲</button>}
-        {this.props.link.description} ({this.props.link.url})
-        {this.props.link.votes.length} votes | by{" "}
+        {this.props.link.description} (
+        <a href={this.props.link.url}>{this.props.link.url}</a>)
+        {" "} {this.props.link.votes.length} votes | by{" "}
         {this.props.link.postedBy ? this.props.link.postedBy.name : "Unknown"}{" "}
         {timeDifferenceForDate(this.props.link.createdAt)}
       </div>

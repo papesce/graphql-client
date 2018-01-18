@@ -6,10 +6,11 @@ import gql from 'graphql-tag'
 class LinkList extends Component {
   _updateCacheAfterVote = (store, createVote, linkId) => {
     // 1
+    debugger;
     const data = store.readQuery({ query: FEED_QUERY })
   
     // 2
-    const votedLink = data.feed.links.find(link => link.id === linkId)
+    const votedLink = data.feed.find(link => link.id === linkId)
     votedLink.votes = createVote.link.votes
   
     // 3
@@ -47,11 +48,12 @@ class LinkList extends Component {
 
 // 1
 export const FEED_QUERY = gql`
-  query FeedQuery($first: Int, $skip: Int) {
-    feed(first: $first, skip: $skip) {
+  query FeedQuery {
+    feed {
         id
         url
         description
+        createdAt
         postedBy {
           id
           name
